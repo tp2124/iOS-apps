@@ -10,16 +10,35 @@ import UIKit
 import WebKit
 
 class ViewController: UIViewController {
+    
+    private var urlVisitHistory : Stack<URLRequest>
+    private var currentLoadedUrl : URLRequest
+    
+    required init?(coder: NSCoder) {
+        self.urlVisitHistory = Stack<URLRequest>()
+        self.currentLoadedUrl = URLRequest(url: URL(string: "apple.com")!)
+        super.init(coder: coder)
+    }
+    
     @IBAction func goButtonTapped(_ sender: Any) {
-            print("addressField has: \(addressField.text ?? "")")
+        print("addressField has: \(addressField.text ?? "")")
         guard let addressFieldText = addressField.text?.lowercased() else { return }
-            guard let url = URL(string: "https://" + addressFieldText) else { return }
-            let urlRequest = URLRequest(url: url)
-            webView.load(urlRequest)
+        guard let url = URL(string: "https://" + addressFieldText) else { return }
+        let urlRequest = URLRequest(url: url)
+        webView.load(urlRequest)
+
+//        urlVisitHistory.push(currentLoadedUrl)
+//        currentLoadedUrl = urlRequest
+//        webView.load(currentLoadedUrl)
     }
     
     @IBAction func backButtonTapped(_ sender: Any) {
         webView.goBack()
+//        if (!urlVisitHistory.isEmpty()) {
+//            let urlReq = urlVisitHistory.pop()
+//            addressField.text = urlReq.url!.absoluteString
+//            webView.load(urlReq)
+//        }
     }
     
     override func viewDidLoad() {
